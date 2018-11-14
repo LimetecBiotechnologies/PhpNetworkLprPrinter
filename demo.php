@@ -6,8 +6,15 @@
  * Licensed under the GNU GPL v3 license. See file COPYRIGHT for details. 
  */
 
-//Include the class library
-include("PhpNetworkLprPrinter.php");
+use Limetec\PhpNetworkLprPrinter\PhpNetworkLprPrinter;
+
+foreach (array(__DIR__ . '/../../autoload.php',__DIR__ . '/../autoload.php', __DIR__ . '/vendor/autoload.php') as $file) {
+    if (file_exists($file)) {
+        require $file;
+
+        break;
+    }
+}
 
 echo "<h1>PhpNetworkLprPrinter example</h1>";
 
@@ -18,5 +25,3 @@ $lpr->printText("Hello world!"); //Text here
 echo "<h3>Debug</h3><pre>";
 print_r($lpr->getDebug());
 echo "</pre>";
-
-?>
