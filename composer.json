@@ -2,7 +2,7 @@
   "name": "limetec/php-network-lpr-printer",
   "description": "PHP class to manage network printers via LPR (Line Printer Daemon Protocol) standard",
   "require": {
-    "php": "^5.3|^7.1"
+    "php": "^7.1"
   },
   "autoload": {
     "psr-4": {
