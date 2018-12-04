@@ -23,7 +23,7 @@ class PhpNetworkLprPrinter {
     /**
      * Printer's Port. Default port 515 (see constructor), but it can change with the function setPort
      *
-     * @var    integer
+     * @var    int
      * @access protected
      * @since  1.0
      */
@@ -32,7 +32,7 @@ class PhpNetworkLprPrinter {
     /**
      * Max seconds to connect to the printer. Default 20, but it can change with the function setTimeOut
      *
-     * @var    integer
+     * @var    int
      * @access protected
      * @since  1.0
      */
@@ -50,7 +50,7 @@ class PhpNetworkLprPrinter {
     /**
      * Error number if connection fails
      *
-     * @var    integer
+     * @var    int
      * @access protected
      * @since  1.0
      */
@@ -59,7 +59,7 @@ class PhpNetworkLprPrinter {
     /**
      * Error message if connection fails
      *
-     * @var    integer
+     * @var    int
      * @access protected
      * @since  1.0
      */
@@ -78,7 +78,7 @@ class PhpNetworkLprPrinter {
      * Class constructor.
      *
      * @param string  $host The printer's host
-     * @param integer $port The printer's port
+     * @param int $port The printer's port
      *
      * @since 1.0
      */
@@ -92,11 +92,11 @@ class PhpNetworkLprPrinter {
      *
      * @access public
      *
-     * @param integer $port Printer's port
+     * @param int $port Printer's port
      *
      * @since  1.0
      */
-    public function setPort (integer $port): void {
+    public function setPort (int $port): void {
         $this->_port = $port;
         $this->setMessage('Setting port: '.$this->_port);
     }
@@ -106,11 +106,11 @@ class PhpNetworkLprPrinter {
      *
      * @access public
      *
-     * @param integer $timeout Timeout in seconds
+     * @param int $timeout Timeout in seconds
      *
      * @since  1.0
      */
-    public function setTimeOut (integer $timeout): void {
+    public function setTimeOut (int $timeout): void {
         $this->_timeout = $timeout;
         $this->setMessage('Setting time out: '.$this->_timeout);
     }
@@ -119,7 +119,7 @@ class PhpNetworkLprPrinter {
      * Gets the error number
      *
      * @access public
-     * @return integer    Error number
+     * @return int    Error number
      * @since  1.0
      */
     public function getErrNo (): int {
@@ -337,12 +337,12 @@ class PhpNetworkLprPrinter {
      *
      * @access private
      *
-     * @param integer $jobid
+     * @param int $jobid
      *
      * @return string cfA control String
      * @since  1.0
      */
-    private function makecfA (integer $jobid): string {
+    private function makecfA (int $jobid): string {
         $this->setMessage('Setting cfA control String');
 
         if (isset($_SERVER['REMOTE_ADDR'])) {
