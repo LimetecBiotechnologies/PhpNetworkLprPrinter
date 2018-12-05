@@ -2,7 +2,7 @@
 
 namespace Limetec\PhpNetworkLprPrinter;
 
-/*
+/**
  * Class PhpLprPrinter
  * Print your files via PHP with LPR network printer
  * See http://www.faqs.org/rfcs/rfc1179.html to understand RFC 1179 - Line printer daemon protocol
@@ -12,7 +12,7 @@ namespace Limetec\PhpNetworkLprPrinter;
  */
 class PhpNetworkLprPrinter {
     /**
-     * Printer's host. Initialize by constructor
+     * Printer"s host. Initialize by constructor
      *
      * @var    string
      * @access protected
@@ -21,7 +21,7 @@ class PhpNetworkLprPrinter {
     private $_host;
 
     /**
-     * Printer's Port. Default port 515 (see constructor), but it can change with the function setPort
+     * Printer"s Port. Default port 515 (see constructor), but it can change with the function setPort
      *
      * @var    int
      * @access protected
@@ -45,7 +45,7 @@ class PhpNetworkLprPrinter {
      * @access protected
      * @since  1.0
      */
-    private $_username = 'PhpNetworkLprPrinter';
+    private $_username = "PhpNetworkLprPrinter";
 
     /**
      * Error number if connection fails
@@ -77,12 +77,12 @@ class PhpNetworkLprPrinter {
     /**
      * Class constructor.
      *
-     * @param string  $host The printer's host
-     * @param int $port The printer's port
+     * @param string $host The printer"s host
+     * @param int    $port The printer"s port
      *
      * @since 1.0
      */
-    public function __construct ($host, $port = 515) {
+    public function __construct (string $host, int $port = 515) {
         $this->_host = $host;
         $this->_port = $port;
     }
@@ -92,13 +92,13 @@ class PhpNetworkLprPrinter {
      *
      * @access public
      *
-     * @param int $port Printer's port
+     * @param int $port Printer"s port
      *
      * @since  1.0
      */
     public function setPort (int $port): void {
         $this->_port = $port;
-        $this->setMessage('Setting port: '.$this->_port);
+        $this->setMessage("Setting port: ".$this->_port);
     }
 
     /**
@@ -112,7 +112,7 @@ class PhpNetworkLprPrinter {
      */
     public function setTimeOut (int $timeout): void {
         $this->_timeout = $timeout;
-        $this->setMessage('Setting time out: '.$this->_timeout);
+        $this->setMessage("Setting time out: ".$this->_timeout);
     }
 
     /**
@@ -164,18 +164,18 @@ class PhpNetworkLprPrinter {
 
         //If fail, exit with false
         if (!$connection) {
-            $this->setError('Error in connection. Please change HOST or PORT.');
+            $this->setError("Error in connection. Please change HOST or PORT.");
 
             return false;
         }
 
         //Print any waiting job
-        fwrite($connection, \chr(1).$queue.'\n');
-        $this->setMessage('Print any waiting job...');
+        fwrite($connection, \chr(1).$queue."\n");
+        $this->setMessage("Print any waiting job...");
 
         //Checking errors
         if (\ord(fread($connection, 1)) !== 0) {
-            $this->setError('Error while start print jobs on queue '.$queue);
+            $this->setError("Error while start print jobs on queue ".$queue);
             //Close connection
             fclose($connection);
 
@@ -199,8 +199,7 @@ class PhpNetworkLprPrinter {
      * @return boolean    True if success
      * @since  1.0
      */
-    public function printText (string $text = '', string $queue = 'raw'): ?bool {
-
+    public function printText (string $text = "", string $queue = "raw"): ?bool {
         //Initial data
         $jobid = 001; //TODO: Autoincrement $jobid
 
@@ -212,18 +211,18 @@ class PhpNetworkLprPrinter {
 
         //If fail, exit with false
         if (!$connection) {
-            $this->setError('Error in connection. Please change HOST or PORT.');
+            $this->setError("Error in connection. Please change HOST or PORT.");
 
             return false;
         }
 
         //Starting printer
-        fwrite($connection, \chr(2).$queue.'\n');
-        $this->setMessage('Starting printer...');
+        fwrite($connection, \chr(2).$queue."\n");
+        $this->setMessage("Starting printer...");
 
         //Checking errors
         if (\ord(fread($connection, 1)) !== 0) {
-            $this->setError('Error while start printing on queue');
+            $this->setError("Error while start printing on queue");
             //Close connection
             fclose($connection);
 
@@ -232,13 +231,13 @@ class PhpNetworkLprPrinter {
 
         //Write control file
         $ctrl = $this->makecfA($jobid);
-        fwrite($connection, \chr(2).\strlen($ctrl).' cfA'.$jobid.$this->_username.'\n');
+        fwrite($connection, \chr(2).\strlen($ctrl)." cfA".$jobid.$this->_username."\n");
 
-        $this->setMessage('Sending control file...');
+        $this->setMessage("Sending control file...");
 
         //Checking errors
         if (\ord(fread($connection, 1)) !== 0) {
-            $this->setError('Error while start sending control file');
+            $this->setError("Error while start sending control file");
             //Close connection
             fclose($connection);
 
@@ -248,26 +247,26 @@ class PhpNetworkLprPrinter {
         fwrite($connection, $ctrl.\chr(0));
         //Checking errors
         if (\ord(fread($connection, 1)) !== 0) {
-            $this->setError('Error while sending control file');
+            $this->setError("Error while sending control file");
             //Close connection
             fclose($connection);
 
             return false;
         }
 
-        if (isset($_SERVER['REMOTE_ADDR'])) {
-            $hostname = '';
+        if (isset($_SERVER["REMOTE_ADDR"])) {
+            $hostname = "";
         } else {
             $hostname = gethostname();
         }
 
         //Send data string
-        fwrite($connection, \chr(3).\strlen($text).' dfA'.$jobid.$hostname.'\n');
-        $this->setMessage('Sending data...');
+        fwrite($connection, \chr(3).\strlen($text)." dfA".$jobid.$hostname."\n");
+        $this->setMessage("Sending data...");
 
         //Checking errors
         if (\ord(fread($connection, 1)) !== 0) {
-            $this->setError('Error while sending control file');
+            $this->setError("Error while sending control file");
             //Close connection
             fclose($connection);
 
@@ -277,14 +276,14 @@ class PhpNetworkLprPrinter {
         fwrite($connection, $text.\chr(0));
         //Checking errors
         if (\ord(fread($connection, 1)) !== 0) {
-            $this->setError('Error while sending control file');
+            $this->setError("Error while sending control file");
             //Close connection
             fclose($connection);
 
             return false;
         }
 
-        $this->setMessage('Data received!!!');
+        $this->setMessage("Data received!!!");
 
         //Close connection
         fclose($connection);
@@ -298,12 +297,12 @@ class PhpNetworkLprPrinter {
      * @access public
      *
      * @param string $message Message
-     * @param string $type    Message's type, for example 'message' or 'error'
+     * @param string $type    Message"s type, for example "message" or "error"
      *
      * @since  1.0
      */
-    private function setMessage (string $message = '', string $type = 'message'): void {
-        $this->_debug[] = ['message' => $message, 'time' => time(), 'type' => $type];
+    private function setMessage (string $message = "", string $type = "message"): void {
+        $this->_debug[] = ["message" => $message, "time" => time(), "type" => $type];
     }
 
     /**
@@ -315,8 +314,8 @@ class PhpNetworkLprPrinter {
      *
      * @since  1.0
      */
-    private function setError (string $error = ''): void {
-        $this->_debug[] = ['message' => $error, 'time' => time(), 'type' => 'error'];
+    private function setError (string $error = ""): void {
+        $this->_debug[] = ["message" => $error, "time" => time(), "type" => "error"];
         $this->_error_msg = $error;
     }
 
@@ -327,9 +326,9 @@ class PhpNetworkLprPrinter {
      * @since     1.0
      */
     private function connect () {
-        $this->setMessage('Connecting... Host: '.$this->_host.', Port: '.$this->_port);
+        $this->setMessage("Connecting... Host: ".$this->_host.", Port: ".$this->_port);
 
-        return stream_socket_client('tcp://'.$this->_host.':'.$this->_port, $this->_error_number, $this->_error_msg, $this->_timeout);
+        return stream_socket_client("tcp://".$this->_host.":".$this->_port, $this->_error_number, $this->_error_msg, $this->_timeout);
     }
 
     /**
@@ -343,19 +342,19 @@ class PhpNetworkLprPrinter {
      * @since  1.0
      */
     private function makecfA (int $jobid): string {
-        $this->setMessage('Setting cfA control String');
+        $this->setMessage("Setting cfA control String");
 
-        if (isset($_SERVER['REMOTE_ADDR'])) {
-            $hostname = '';
+        if (isset($_SERVER["REMOTE_ADDR"])) {
+            $hostname = "";
         } else {
             $hostname = gethostname();
         }
 
-        $cfa = '';
-        $cfa .= 'H'.$hostname.'\n'; //hostname
-        $cfa .= 'P'.$this->_username.'\n'; //user
-        $cfa .= 'ldfA'.$jobid.$hostname.'\n';
-        $cfa .= 'UdfA'.$jobid.$hostname.'\n';
+        $cfa = "";
+        $cfa .= "H".$hostname."\n"; //hostname
+        $cfa .= "P".$this->_username."\n"; //user
+        $cfa .= "ldfA".$jobid.$hostname."\n";
+        $cfa .= "UdfA".$jobid.$hostname."\n";
 
         //TODO: Add more parameters. See http://www.faqs.org/rfcs/rfc1179.html
 
